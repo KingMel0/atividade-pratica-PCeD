@@ -3,7 +3,8 @@ import java.util.concurrent.BlockingQueue;
 
 public class Main {
     public static void main(String[] args) {
-        // Inicialize as entidades
+        
+        // Inicializa as entidades
         Quarto[] quartos = inicializarQuartos(10);
         BlockingQueue<Hospede> filaEspera = new ArrayBlockingQueue<>(50);
         BlockingQueue<Quarto> quartosDisponiveis = new ArrayBlockingQueue<>(10);
@@ -19,7 +20,19 @@ public class Main {
         introduzirAtraso();
 
         // Crie e inicie as threads para os Hóspedes
-        iniciarHospedes(quartos);
+        Thread[] hospedeThreads = iniciarHospedes(quartos);
+
+        // Aguarde que todas as threads dos hóspedes terminem
+        for (Thread thread : hospedeThreads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Após todas as threads terminarem, imprima uma mensagem de conclusão
+        System.out.println("Encerrando o programa.");
     }
 
     // Método para inicializar instâncias de Quarto
@@ -39,8 +52,8 @@ public class Main {
     }
 
     // Método para iniciar threads de Recepcionistas
-    private static void iniciarRecepcionistas(BlockingQueue<Hospede> filaEspera, 
-                                              BlockingQueue<Quarto> quartosDisponiveis, 
+    private static void iniciarRecepcionistas(BlockingQueue<Hospede> filaEspera,
+                                              BlockingQueue<Quarto> quartosDisponiveis,
                                               BlockingQueue<Quarto> quartosLimpeza) {
         for (int i = 0; i < 5; i++) {
             new Recepcionista(filaEspera, quartosDisponiveis, quartosLimpeza).start(); // Crie e inicie 5 Recepcionistas
@@ -50,16 +63,19 @@ public class Main {
     // Método para introduzir um atraso
     private static void introduzirAtraso() {
         try {
-            Thread.sleep(1000); // Atraso de 1 segundo
+            Thread.sleep(1000); 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     // Método para iniciar threads de Hóspedes
-    private static void iniciarHospedes(Quarto[] quartos) {
+    private static Thread[] iniciarHospedes(Quarto[] quartos) {
+        Thread[] threadsHospedes = new Thread[50];
         for (int i = 0; i < 50; i++) {
-            new Hospede("Hóspede " + (i + 1), 1, quartos).start(); // Crie e inicie 50 Hóspedes
+            threadsHospedes[i] = new Thread(new Hospede("Hóspede " + (i + 1), 1, quartos));
+            threadsHospedes[i].start(); 
         }
+        return threadsHospedes;
     }
 }

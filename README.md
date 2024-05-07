@@ -1,2 +1,7 @@
-# atividade-pratica-PCeD
-Trabalho em grupo de Programação Concorrente e Distribuída
+Programação Concorrente e Distibuída
+Atividade prática coletiva Bimestre N1
+
+
+MARCO TULIO FERREIRA - UC22102516
+FELIPE AIRES VILLAÇA - UC22101507
+EDUARDO HENRIQUE MORAES GAMAS

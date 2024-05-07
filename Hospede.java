@@ -28,7 +28,8 @@ public class Hospede extends Thread {
     @Override
     public void run() {
         try {
-            Quarto quarto = getQuartoDisponivel(); // Obtém um quarto disponível
+            // Obtém um quarto disponível
+            Quarto quarto = getQuartoDisponivel(); 
             if (quarto != null) {
                 synchronized (quarto) {
                     // Verifica se o quarto está disponível para reserva
